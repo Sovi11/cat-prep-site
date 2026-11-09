@@ -1,0 +1,1562 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAT 2026 Desk</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #F5F4F8;
+    --surface: #FFFFFF;
+    --surface-2: #EEEDF4;
+    --ink: #17141F;
+    --ink-2: #413C50;
+    --muted: #6E6880;
+    --hair: #DCD9E4;
+    --accent: #5B32B8;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #EBE4FA;
+    --bid: #0E7C57;
+    --bid-soft: #DFF3EA;
+    --ask: #B93A3A;
+    --ask-soft: #F8E3E3;
+    --warn: #8F5E00;
+    --warn-soft: #FAEFD4;
+    --shadow: 0 1px 2px rgba(23,20,31,.06), 0 6px 20px rgba(23,20,31,.05);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #100E16;
+      --surface: #191622;
+      --surface-2: #211D2D;
+      --ink: #EAE7F2;
+      --ink-2: #C5C0D4;
+      --muted: #8E88A2;
+      --hair: #2F2A3D;
+      --accent: #B79BFF;
+      --accent-ink: #14101F;
+      --accent-soft: #261D3D;
+      --bid: #43C08F;
+      --bid-soft: #12302A;
+      --ask: #EA6E6E;
+      --ask-soft: #3A1E1E;
+      --warn: #E4B04F;
+      --warn-soft: #362B12;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #100E16;
+    --surface: #191622;
+    --surface-2: #211D2D;
+    --ink: #EAE7F2;
+    --ink-2: #C5C0D4;
+    --muted: #8E88A2;
+    --hair: #2F2A3D;
+    --accent: #B79BFF;
+    --accent-ink: #14101F;
+    --accent-soft: #261D3D;
+    --bid: #43C08F;
+    --bid-soft: #12302A;
+    --ask: #EA6E6E;
+    --ask-soft: #3A1E1E;
+    --warn: #E4B04F;
+    --warn-soft: #362B12;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: "IBM Plex Sans Condensed", "Arial Narrow", "IBM Plex Sans", sans-serif;
+    line-height: 1.15;
+    margin: 0;
+    text-wrap: balance;
+  }
+  code, .mono, kbd {
+    font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  code { font-size: .92em; background: var(--surface-2); padding: .08em .35em; border-radius: 3px; }
+  a { color: var(--accent); }
+  button { font: inherit; cursor: pointer; }
+  button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
+  /* ---------- frame ---------- */
+  .frame {
+    display: grid;
+    grid-template-columns: 236px minmax(0, 1fr);
+    gap: 40px;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding-block: 28px 80px;
+    padding-inline: 24px;
+  }
+  .rail {
+    position: sticky;
+    top: calc(env(safe-area-inset-top, 0px) + 20px);
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .brand {
+    display: flex; flex-direction: column; gap: 4px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--hair);
+  }
+  .brand h1 { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  .brand .sub { color: var(--muted); font-size: 12.5px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .clock {
+    border: 1px solid var(--hair); border-radius: 6px; background: var(--surface);
+    padding: 10px 12px; display: grid; gap: 2px;
+  }
+  .clock b {
+    font-family: "IBM Plex Mono", monospace; font-size: 26px; font-weight: 600;
+    letter-spacing: -.02em; color: var(--accent); line-height: 1.1;
+  }
+  .clock span { font-size: 11.5px; color: var(--muted); }
+  nav.rounds { display: flex; flex-direction: column; gap: 2px; }
+  nav.rounds a {
+    display: grid; grid-template-columns: 26px 1fr auto; align-items: baseline; gap: 8px;
+    padding: 7px 8px; border-radius: 4px;
+    color: var(--ink-2); text-decoration: none; font-size: 14px;
+  }
+  nav.rounds a:hover { background: var(--surface-2); }
+  nav.rounds a .k { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
+  nav.rounds a .n { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--muted); }
+  .rail .progress {
+    padding: 12px; border: 1px solid var(--hair); border-radius: 6px; background: var(--surface);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .bar { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+  .progress .num { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink-2); }
+  .rail .tiny { font-size: 12px; color: var(--muted); }
+  .rail .tiny button { background: none; border: 0; color: var(--accent); padding: 0; }
+
+  main { display: flex; flex-direction: column; gap: 56px; min-width: 0; }
+
+  /* ---------- header ---------- */
+  .lede { display: grid; gap: 14px; max-width: 72ch; }
+  .lede h2 { font-size: 34px; font-weight: 700; letter-spacing: -.015em; }
+  .lede p { margin: 0; color: var(--ink-2); font-size: 16px; }
+  .facts {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--hair); border: 1px solid var(--hair); border-radius: 6px; overflow: hidden;
+  }
+  .facts div { background: var(--surface); padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+  .facts b { font-family: "IBM Plex Sans Condensed", sans-serif; font-size: 17px; font-weight: 600; }
+  .facts span { font-size: 12.5px; color: var(--muted); }
+
+  /* ---------- sections ---------- */
+  section { display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 20px; }
+  .sec-head { display: grid; gap: 6px; max-width: 72ch; }
+  .sec-head h2 { font-size: 26px; font-weight: 600; }
+  .sec-head p { margin: 0; color: var(--ink-2); }
+  .sec-head .eyebrow { color: var(--accent); }
+
+  .qlist { display: flex; flex-direction: column; gap: 12px; }
+  .q {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+  }
+  .q.done { opacity: .62; }
+  .q header {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start;
+    padding: 14px 16px 0;
+  }
+  .q .id { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); padding-top: 3px; }
+  .q h3 { font-size: 17px; font-weight: 600; }
+  .q .tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .tag {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 3px; background: var(--surface-2); color: var(--ink-2); white-space: nowrap;
+  }
+  .tag.hard { background: var(--ask-soft); color: var(--ask); }
+  .tag.core { background: var(--accent-soft); color: var(--accent); }
+  .tag.tita { background: var(--bid-soft); color: var(--bid); }
+  .q .body { padding: 8px 16px 14px; display: grid; gap: 10px; max-width: 76ch; }
+  .q .body p { margin: 0; }
+  .q .body ul, .q .body ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 4px 14px; font-size: 14px; color: var(--ink-2); }
+  .opts span { font-family: "IBM Plex Mono", monospace; font-size: 13px; }
+  .passage { display: grid; gap: 10px; max-width: 68ch; font-size: 15px; color: var(--ink-2); }
+  .passage p { margin: 0; }
+  details { border-top: 1px dashed var(--hair); }
+  details summary {
+    list-style: none; cursor: pointer; padding: 10px 16px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--accent); display: flex; align-items: center; gap: 8px;
+  }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: "+"; font-weight: 600; width: 10px; display: inline-block; }
+  details[open] summary::before { content: "\2013"; }
+  details .ans { padding: 0 16px 16px; display: grid; gap: 8px; max-width: 76ch; color: var(--ink-2); }
+  details .ans p { margin: 0; }
+  details .ans ul, details .ans ol { margin: 0; padding-left: 20px; display: grid; gap: 5px; }
+  details .ans strong { color: var(--ink); }
+  details .ans em.why { color: var(--muted); font-style: italic; display: block; }
+  .q footer {
+    border-top: 1px solid var(--hair); padding: 8px 16px; display: flex; gap: 14px; align-items: center;
+    font-size: 12.5px; color: var(--muted);
+  }
+  .q footer label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; color: var(--ink-2); }
+  .q footer input { accent-color: var(--accent); }
+  .q footer .flag { margin-left: auto; }
+  .q footer .flag input { accent-color: var(--ask); }
+
+  .callout {
+    border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 10px 14px; border-radius: 0 4px 4px 0;
+    font-size: 14px; max-width: 76ch;
+  }
+  .callout.blue { border-color: var(--accent); background: var(--accent-soft); }
+  .callout.red { border-color: var(--ask); background: var(--ask-soft); }
+  .callout p { margin: 0; }
+  .callout p + p { margin-top: 6px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .note {
+    background: var(--surface); border: 1px solid var(--hair); border-radius: 6px; padding: 14px 16px;
+    display: grid; gap: 8px; font-size: 14px;
+  }
+  .note h4 { font-size: 15px; font-weight: 600; }
+  .note ul, .note ol { margin: 0; padding-left: 18px; display: grid; gap: 5px; color: var(--ink-2); }
+  .note p { margin: 0; color: var(--ink-2); }
+  .note .eyebrow { color: var(--accent); }
+
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  th { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  td.num, th.num { font-family: "IBM Plex Mono", monospace; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: 0; }
+  tr.hi td { background: var(--accent-soft); }
+  .tablewrap { overflow-x: auto; border: 1px solid var(--hair); border-radius: 6px; background: var(--surface); }
+
+  /* ---------- phases ---------- */
+  .phases { display: grid; gap: 10px; }
+  .phase {
+    background: var(--surface); border: 1px solid var(--hair); border-radius: 6px;
+    display: grid; grid-template-columns: 74px 1fr; gap: 0; overflow: hidden;
+  }
+  .phase .hrs {
+    background: var(--surface-2); border-right: 1px solid var(--hair);
+    display: grid; align-content: center; justify-items: center; gap: 1px; padding: 12px 6px;
+  }
+  .phase .hrs b { font-family: "IBM Plex Mono", monospace; font-size: 21px; font-weight: 600; color: var(--accent); }
+  .phase .hrs span { font-size: 10.5px; color: var(--muted); font-family: "IBM Plex Mono", monospace; letter-spacing: .05em; text-transform: uppercase; }
+  .phase .meat { padding: 12px 16px; display: grid; gap: 7px; }
+  .phase h4 { font-size: 16px; font-weight: 600; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .phase h4 em { font-family: "IBM Plex Mono", monospace; font-style: normal; font-size: 11.5px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+  .phase ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--ink-2); font-size: 14px; }
+
+  /* ---------- tools ---------- */
+  .tool {
+    background: var(--surface); border: 1px solid var(--hair); border-radius: 6px; box-shadow: var(--shadow);
+    padding: 18px; display: grid; gap: 14px;
+  }
+  .tool h3 { font-size: 18px; font-weight: 600; }
+  .tool > p { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 72ch; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    border: 1px solid var(--hair); background: var(--surface); color: var(--ink); padding: 7px 12px; border-radius: 4px;
+    font-size: 13.5px; font-weight: 500;
+  }
+  .btn:hover { background: var(--surface-2); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .btn.small { padding: 4px 9px; font-size: 12.5px; }
+  .btn[disabled] { opacity: .5; cursor: default; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); gap: 1px; background: var(--hair); border: 1px solid var(--hair); border-radius: 6px; overflow: hidden; }
+  .stats div { background: var(--surface-2); padding: 8px 12px; display: grid; gap: 1px; }
+  .stats b { font-family: "IBM Plex Mono", monospace; font-size: 18px; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .stats span { font-size: 11.5px; color: var(--muted); }
+  .stats div.good b { color: var(--bid); }
+  .stats div.bad b { color: var(--ask); }
+  .feedback { font-size: 14px; min-height: 22px; color: var(--ink-2); }
+  .feedback.good { color: var(--bid); }
+  .feedback.bad { color: var(--ask); }
+  .drill-q {
+    font-family: "IBM Plex Mono", monospace; font-size: 27px; font-weight: 500; letter-spacing: -.01em;
+    padding: 8px 0 2px; min-height: 52px; line-height: 1.25;
+  }
+  input.big {
+    font-family: "IBM Plex Mono", monospace; font-size: 20px; padding: 8px 12px; width: 170px;
+    border: 1px solid var(--hair); border-radius: 4px; background: var(--surface); color: var(--ink);
+  }
+  .calcgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+  .calcrow {
+    border: 1px solid var(--hair); border-radius: 6px; padding: 12px; display: grid; gap: 8px; background: var(--surface-2);
+  }
+  .calcrow h4 { font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline; }
+  .calcrow h4 em { font-family: "IBM Plex Mono", monospace; font-style: normal; font-size: 11px; color: var(--muted); }
+  .calcrow .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .calcrow label { display: grid; gap: 3px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+  .calcrow input {
+    font-family: "IBM Plex Mono", monospace; font-size: 15px; padding: 5px 8px; width: 100%;
+    border: 1px solid var(--hair); border-radius: 4px; background: var(--surface); color: var(--ink);
+  }
+  .calcrow .out { display: flex; justify-content: space-between; align-items: baseline; font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--ink-2); border-top: 1px dashed var(--hair); padding-top: 7px; }
+  .calcrow .out b { font-size: 16px; color: var(--ink); }
+  .timer-face {
+    font-family: "IBM Plex Mono", monospace; font-size: 52px; font-weight: 600; letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums; line-height: 1;
+  }
+  .timer-face.warn { color: var(--warn); }
+  .timer-face.crit { color: var(--ask); }
+  .logtable input {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; padding: 4px 6px; width: 100%; min-width: 54px;
+    border: 1px solid var(--hair); border-radius: 3px; background: var(--surface); color: var(--ink);
+    text-align: right;
+  }
+  .logtable input.date { text-align: left; min-width: 82px; }
+  .sr { position: absolute; left: -9999px; }
+
+  @media (max-width: 880px) {
+    .frame { grid-template-columns: 1fr; gap: 20px; padding-block: 18px 60px; padding-inline: 16px; }
+    .rail { position: static; }
+    nav.rounds { flex-direction: row; overflow-x: auto; gap: 4px; padding-bottom: 4px; }
+    nav.rounds a { grid-template-columns: auto auto; white-space: nowrap; }
+    nav.rounds a .n { display: none; }
+    .rail .progress { display: none; }
+    .facts { grid-template-columns: repeat(2, 1fr); }
+    .lede h2 { font-size: 27px; }
+    .drill-q { font-size: 21px; }
+    .timer-face { font-size: 40px; }
+    .phase { grid-template-columns: 58px 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
+
+@media(max-width:880px){.frame{grid-template-columns:minmax(0,1fr)}.rail,main{min-width:0}.grid2{grid-template-columns:minmax(0,1fr)}nav.rounds{max-width:100%}.tablewrap{max-width:100%;overflow-x:auto}}
+</style></head><body>
+
+<div class="frame">
+  <aside class="rail">
+    <div class="brand">
+      <h1>CAT 2026 Desk</h1>
+      <div class="sub">29 Nov 2026 &middot; IIM Indore &middot; 35-hour budget</div>
+    </div>
+    <div class="clock">
+      <b id="dday">&mdash;</b>
+      <span id="ddaySub">days to the exam</span>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:6px">Sections</div>
+      <nav class="rounds">
+        <a href="#brief"><span class="k">00</span><span>Brief</span><span class="n"></span></a>
+        <a href="#plan"><span class="k">01</span><span>The 35 hours</span><span class="n">35h</span></a>
+        <a href="#play"><span class="k">02</span><span>Playbook</span><span class="n"></span></a>
+        <a href="#varc"><span class="k">03</span><span>VARC</span><span class="n" data-count="varc"></span></a>
+        <a href="#dilr"><span class="k">04</span><span>DILR</span><span class="n" data-count="dilr"></span></a>
+        <a href="#qa"><span class="k">05</span><span>QA</span><span class="n" data-count="qa"></span></a>
+        <a href="#drills"><span class="k">06</span><span>Drills</span><span class="n"></span></a>
+        <a href="#log"><span class="k">07</span><span>Mock log</span><span class="n"></span></a>
+        <a href="#logistics"><span class="k">08</span><span>Exam day</span><span class="n"></span></a>
+      </nav>
+    </div>
+    <p><a href="materials/index.html">Full study library →</a></p>
+    <div class="progress">
+      <div class="eyebrow">Worked through</div>
+      <div class="bar"><i id="bar"></i></div>
+      <div class="num"><span id="doneN">0</span> / <span id="totalN">0</span> questions &middot; <span id="flagN">0</span> flagged</div>
+    </div>
+    <div class="tiny">Progress and the mock log save in this browser. <button id="reset">Reset</button></div>
+  </aside>
+
+  <main>
+
+    <!-- ================= 00 BRIEF ================= -->
+    <section id="brief">
+      <div class="lede">
+        <div class="eyebrow">Brief</div>
+        <h2>Two hours, 68 questions, and a section you cannot go back to</h2>
+        <p>CAT is not a knowledge test. Everyone at the 99th percentile can solve every question given unlimited time. It is a selection problem under a hard clock: pick the right 50 of 68, in three 40-minute windows that lock behind you. That is market making with 22 instruments and no ability to re-quote.</p>
+      </div>
+      <div class="facts">
+        <div><b>68 Q</b><span>24 VARC &middot; 22 DILR &middot; 22 QA</span></div>
+        <div><b>204</b><span>max marks &middot; +3 / &minus;1 &middot; TITA no penalty</span></div>
+        <div><b>40 min</b><span>per section, sequential, no return</span></div>
+        <div><b>~99.2</b><span>realistic target on 35 hours</span></div>
+      </div>
+
+      <div class="callout blue">
+        <p><strong>The asymmetry that drives every decision on this page.</strong> 32 of 66 in DILR is roughly the 99th percentile &mdash; eleven correct, zero wrong. VARC needs about 49 of 72 for the same percentile. Most of the country cannot do DILR or QA at all; almost everyone can read. So your marginal hour is worth far more in VARC <em>up to the sectional floor</em>, and worth nothing above it.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="note">
+          <div class="eyebrow">Your edge</div>
+          <h4>QA and DILR are close to free</h4>
+          <ul>
+            <li>QA is class 8&ndash;10 arithmetic, algebra and mensuration. No calculus, no proofs. Your only real risk is over-solving.</li>
+            <li>DILR is constraint propagation with a story on top. You do this for a living.</li>
+            <li>Arithmetic alone is ~45% of QA and the highest marks-per-minute content in the paper.</li>
+          </ul>
+        </div>
+        <div class="note">
+          <div class="eyebrow">Your hole</div>
+          <h4>VARC is where quant people die</h4>
+          <ul>
+            <li>Four dense passages on aesthetics, historiography, sociology. Not your reading.</li>
+            <li>The "correct" answer often feels arguable, so you burn time re-reading instead of committing.</li>
+            <li>IIM A/B/C impose sectional cutoffs near the 80&ndash;85th percentile. A 99.8 overall with a 75 in VARC gets rejected by all three.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px">What a 99.2 paper actually looks like</div>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Section</th><th class="num">Attempt</th><th class="num">Correct</th><th class="num">Raw</th><th class="num">Sectional %ile</th></tr></thead>
+            <tbody>
+              <tr><td>VARC</td><td class="num">17</td><td class="num">12</td><td class="num">31</td><td class="num">~86</td></tr>
+              <tr><td>DILR</td><td class="num">17</td><td class="num">14</td><td class="num">39</td><td class="num">~99.5</td></tr>
+              <tr><td>QA</td><td class="num">18</td><td class="num">16</td><td class="num">46</td><td class="num">~99.6</td></tr>
+              <tr class="hi"><td><strong>Total</strong></td><td class="num"><strong>52 / 68</strong></td><td class="num"><strong>42</strong></td><td class="num"><strong>116</strong></td><td class="num"><strong>~99.2</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p style="margin:0;color:var(--ink-2);max-width:72ch;">Sixteen questions untouched and you land at 99.2. The VARC line is <em>mediocre</em> &mdash; 12 of 17 &mdash; and it still works, because DILR and QA carry the paper. Internalise that number. The people who try to attempt all 68 score 70.</p>
+
+      <div class="callout">
+        <p><strong>The honest bit.</strong> IIM composite scores weight academic and gender diversity heavily. As a general-category male engineer, the practical bar for an A/B/C call is typically 99.5+, sometimes higher, even with strong academics and work experience. This page is optimised for a cleanly played 99+, not for calls. FMS, MDI, SPJIMR, the IIT DoMS programmes and the newer IIMs sit meaningfully lower.</p>
+      </div>
+    </section>
+
+    <!-- ================= 01 PLAN ================= -->
+    <section id="plan">
+      <div class="sec-head">
+        <div class="eyebrow">Section 01</div>
+        <h2>The 35 hours</h2>
+        <p>Ten weeks from 20 September. Roughly 55% of the budget goes to mocks and mock analysis rather than to learning content &mdash; deliberate, because you have no knowledge gap. You have an exam-craft gap, and exam-craft is only built under the clock.</p>
+      </div>
+
+      <div class="phases">
+        <div class="phase">
+          <div class="hrs"><b>4</b><span>hours</span></div>
+          <div class="meat">
+            <h4>Phase 0 &mdash; Calibrate <em>Week 1 &middot; 20&ndash;27 Sep</em></h4>
+            <ul>
+              <li>Take CAT 2024 Slot 2 cold, full timing, 8:30 AM, no preparation. Three 40-minute alarms, stop dead on each.</li>
+              <li>Analyse for 90 minutes. Tag every miss: <strong>knowledge / slow / careless / selection / blind</strong>.</li>
+              <li>That diagnostic reallocates everything below. Default split is VARC 5h, DILR 4h, QA 2h.</li>
+              <li><strong>VARC under 80th percentile</strong> &rarr; go VARC 7h, DILR 3h, QA 1h. This is the likely case and the emergency one.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="hrs"><b>11</b><span>hours</span></div>
+          <div class="meat">
+            <h4>Phase 1 &mdash; Build <em>Weeks 2&ndash;4 &middot; 28 Sep &ndash; 18 Oct</em></h4>
+            <ul>
+              <li><strong>VARC, 5h.</strong> 15&ndash;18 real passages, 8 minutes each, hard stop, all four questions attempted. Then name the trap on every miss.</li>
+              <li><strong>DILR, 4h.</strong> 16&ndash;20 sets, 12 minutes each, hard stop. On every failure ask one question only: what was the entry point I missed?</li>
+              <li><strong>QA, 2h.</strong> One arithmetic speed session, one full sectional sim. The sim's purpose is practising abandonment, not scoring.</li>
+              <li>Two sessions a week, 1.5&ndash;2h each. Never 20-minute sessions &mdash; the section is 40 minutes and you need that endurance.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="hrs"><b>14</b><span>hours</span></div>
+          <div class="meat">
+            <h4>Phase 2 &mdash; Mock cycle <em>Weeks 5&ndash;8 &middot; 19 Oct &ndash; 15 Nov</em></h4>
+            <ul>
+              <li>One full mock per week, same time every week, Saturday or Sunday 8:30 AM. 2h mock + 1h15 analysis.</li>
+              <li>Buy a series (IMS / TIME / CL, ~&#8377;2.5k). The percentile against a real cohort of 20,000 is the whole point; your raw score alone means nothing.</li>
+              <li><strong>Week 6 focus:</strong> selection discipline. <strong>Week 7:</strong> deliberately do only 3 VARC passages plus all 8 VA and see if accuracy beats the rush. <strong>Week 8:</strong> full dress rehearsal.</li>
+              <li>The 20-minute selection audit inside each analysis is the highest-value block in the plan. Questions you skipped but could have solved in 60 seconds are usually the single biggest leak.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="hrs"><b>6</b><span>hours</span></div>
+          <div class="meat">
+            <h4>Phase 3 &mdash; Peak and taper <em>Weeks 9&ndash;10 &middot; 16&ndash;29 Nov</em></h4>
+            <ul>
+              <li><strong>Sat 21 Nov:</strong> final mock at your actual allotted slot time, plus analysis. Then no more mocks.</li>
+              <li>One hour re-solving every question missed across all five mocks. The same three or four failure modes will repeat. Those are your real opponents.</li>
+              <li><strong>No new material after 22 Nov.</strong> Logistics, 20-minute warm-ups every other day, re-read the playbook on Friday 27th.</li>
+              <li><strong>Sat 28 Nov: nothing.</strong> Sleep. CAT is a sustained-attention test and sleep debt costs more than any two hours of revision gains.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <p><strong>If you end up with more than 35 hours</strong> &mdash; your stated weekly rate suggests nearer 50 &mdash; add in this order, ranked by marginal percentile per hour: two more mocks (+6h), twelve more RC passages (+4h), DILR set-selection drills (+3h), QA sectional sims (+2h). Do <em>not</em> spend them on advanced maths, vocabulary lists, grammar, or "completing the syllabus." CAT has no syllabus worth completing.</p>
+      </div>
+    </section>
+
+    <!-- ================= 02 PLAYBOOK ================= -->
+    <section id="play">
+      <div class="sec-head">
+        <div class="eyebrow">Section 02</div>
+        <h2>Exam-day playbook</h2>
+        <p>Read this three times: now, after Mock 2, and on Friday 27 November. &minus;1 is the spread. Ninety seconds is the capital charge. The capital charge dominates by an order of magnitude.</p>
+      </div>
+
+      <div class="callout red">
+        <p><strong>The three things that lose you the exam.</strong></p>
+        <p><strong>1. Sunk-cost paralysis.</strong> Eight minutes into a DILR set that won't crack, you continue because you've already spent eight minutes. This is the most common way a strong candidate posts a bad DILR score.</p>
+        <p><strong>2. Skipping questions you could have done.</strong> Every mock analysis will surface 3&ndash;5 questions you never opened that you'd have solved in 60 seconds. That's 9&ndash;15 marks, a full percentile band, left on the table because you never scanned.</p>
+        <p><strong>3. Tilt after VARC.</strong> VARC comes first and it will feel bad. You will walk into DILR thinking the paper is gone. It isn't, and you have zero information &mdash; nobody knows their score mid-exam and everything is normalised within your slot.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="note">
+          <div class="eyebrow">VARC &middot; 40 min &middot; 24 Q</div>
+          <h4>Target: 16&ndash;18 attempts, 11&ndash;13 correct, ~86th</h4>
+          <ol>
+            <li><strong>0&ndash;2 min:</strong> read the first two lines of all four passages, rank them. Do the tractable one first.</li>
+            <li><strong>2&ndash;26 min:</strong> three passages, 8 minutes each &mdash; 4 reading, 4 on questions.</li>
+            <li><strong>26&ndash;36 min:</strong> all 8 VA questions. Para-jumble and odd-one-out are TITA, so never leave them blank.</li>
+            <li><strong>36&ndash;40 min:</strong> skim passage 4 for the one or two direct questions, or finish VA properly instead.</li>
+          </ol>
+          <p><strong>Never leave a passage you've read without attempting all four questions.</strong> The read is the sunk cost; the questions are cheap once you've read. Three passages done well beats four rushed: 12/12 is 36 marks, 11/16 is 26.</p>
+        </div>
+
+        <div class="note">
+          <div class="eyebrow">DILR &middot; 40 min &middot; 22 Q &middot; 4 sets</div>
+          <h4>Target: 3 sets solved, 13&ndash;15 correct, ~99th</h4>
+          <ol>
+            <li><strong>0&ndash;5 min:</strong> read all four sets, solve nothing. Mark each GO / MAYBE / NO. This is the best five minutes in the exam and almost everyone skips it.</li>
+            <li>The test for GO is not "can I solve it" but <strong>can I see the first inference</strong> in 60 seconds.</li>
+            <li><strong>5&ndash;17, 17&ndash;29, 29&ndash;40:</strong> three GO sets, twelve minutes each.</li>
+          </ol>
+          <p><strong>The 12-minute abandon rule.</strong> Write your start time for each set on the rough sheet so you can't lie to yourself. This will feel wrong in the moment and it is the most valuable line on this page.</p>
+          <p>Depth beats breadth here &mdash; the opposite of QA. Once a set cracks, the rest of its questions are nearly free.</p>
+        </div>
+
+        <div class="note">
+          <div class="eyebrow">QA &middot; 40 min &middot; 22 Q</div>
+          <h4>Target: 17&ndash;19 attempts, 15&ndash;17 correct, ~99.5th</h4>
+          <ol>
+            <li><strong>Pass 1, 0&ndash;12 min:</strong> all 22 in order, solving only what you can see the path to within 10 seconds. Nets 8&ndash;10. Mark the rest M or X.</li>
+            <li><strong>Pass 2, 12&ndash;30 min:</strong> the M questions at 90&ndash;120 seconds each. Nets 5&ndash;7 more.</li>
+            <li><strong>Pass 3, 30&ndash;40 min:</strong> guess every remaining TITA (free), guess MCQs where two options are eliminated, re-check the two you felt rushed on.</li>
+          </ol>
+          <p><strong>Three-minute hard cap on any question.</strong> None. Not even the elegant one. A four-minute question you get right cost you two you'd also have gotten right: net &minus;3.</p>
+          <p>Plug the options. Approximate aggressively. You are not graded on method.</p>
+        </div>
+
+        <div class="note">
+          <div class="eyebrow">If it goes wrong</div>
+          <h4>Recovery lines</h4>
+          <ul>
+            <li><strong>VARC felt like a disaster.</strong> It felt that way for everyone in your slot. Percentiles are normalised within slot. You have no information. Play DILR and QA exactly as planned.</li>
+            <li><strong>No DILR set looks doable at minute 5.</strong> Take the two least-bad and commit. Two sets clean &mdash; 11 correct, 33 marks &mdash; is around the 99th percentile anyway.</li>
+            <li><strong>Minute 30 in QA with 8 attempts.</strong> Stop solving. Sweep for arithmetic and TITA and harvest volume. Eight more at 70% beats three more at 100%.</li>
+            <li><strong>Machine problem.</strong> Hand up immediately, don't troubleshoot. Lost time is compensated only if it's logged.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 03 VARC ================= -->
+    <section id="varc" data-round="varc">
+      <div class="sec-head">
+        <div class="eyebrow">Section 03</div>
+        <h2>VARC</h2>
+        <p>One RC passage at real CAT density plus four verbal-ability items. Eight minutes for the passage, twelve for the rest. The autopsy matters more than the score: on every miss, name which clause supports the right answer and what made the wrong one attractive.</p>
+      </div>
+
+      <div class="note">
+        <div class="eyebrow">The five traps</div>
+        <h4>CAT wrong options fail in stereotyped ways</h4>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Trap</th><th>What it looks like</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Too strong</strong></td><td>Uses <em>always, must, proves, impossible, abandon</em> where the passage said <em>tends to, suggests</em>.</td></tr>
+              <tr><td><strong>Half-right</strong></td><td>First clause textually supported, second clause invented. You read the first and stopped.</td></tr>
+              <tr><td><strong>Out of scope</strong></td><td>True, sensible, and not in the passage.</td></tr>
+              <tr><td><strong>Reversal</strong></td><td>States the view the author is arguing <em>against</em> as if it were the author's.</td></tr>
+              <tr><td><strong>Detail as main idea</strong></td><td>Accurately describes paragraph 3, offered as the answer to "the primary purpose of the passage."</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Over 15 passages, one or two of these will account for most of your misses. Naming it is most of the fix.</p>
+      </div>
+
+      <div class="q" data-id="rc-passage">
+        <header><span class="id">RC</span><h3>Passage &mdash; on translation and untranslatability</h3><div class="tags"><span class="tag hard">8 min</span></div></header>
+        <div class="body">
+          <div class="passage">
+            <p>Every act of translation begins with a loss that cannot be itemised. The translator does not merely substitute one word for another; she reconstructs, in a second language, an object whose shape was determined by the first. What the original achieved effortlessly &mdash; a pun that doubles as an argument, a cadence that enacts the hesitation it describes &mdash; must now be achieved by other means or abandoned. The question that has vexed theorists of translation for two centuries is whether this loss is incidental, a friction to be minimised by better technique, or constitutive, a feature of the enterprise itself.</p>
+            <p>The instrumentalist answer, dominant for most of the modern period, treats a text as a container for meaning. Meaning is the cargo; language is the vessel. On this view, translation is a transfer operation, and a good translation is one that delivers the cargo intact, with the vessel's peculiarities discarded as packaging. The appeal of this model is obvious: it makes translation assessable. One can ask whether the information arrived, and the answer is in principle a matter of fact.</p>
+            <p>Against this stands a tradition, running from Schleiermacher through Benjamin to Berman, that denies the separability of cargo and vessel. If the meaning of a text is not prior to its language but produced by it, then there is nothing to extract. What the translator confronts is not a message in a foreign wrapper but a form of life &mdash; a set of assumptions about what may be said, what must be implied, and what will be understood without saying. On this account, a translation that reads fluently in the target language has almost certainly falsified its source, because fluency is precisely the sensation of encountering one's own assumptions. The translator's obligation is therefore not to domesticate but to disturb: to make the target language strain visibly under the weight of what it is being asked to carry.</p>
+            <p>The difficulty with this second view is that it proves too much. If untranslatability is constitutive, translation should be impossible, and yet it manifestly is not. Texts do cross; arguments do survive the passage; readers of a translated philosopher can and do disagree productively with her. Any theory that cannot account for this ordinary success is describing something other than translation.</p>
+            <p>A more defensible position abandons the question of fidelity altogether. Translation is not a transfer but a performance &mdash; a reading made public and made permanent. The translator, like a musician working from a score, produces something that did not exist before and that could have been produced otherwise. We do not ask whether a performance of a sonata is faithful; we ask whether it is intelligent, whether it hears things in the score that we had not heard. The relevant failure is not infidelity but dullness. The relevant virtue is not accuracy but consequence: the capacity of the new text to be argued with, borrowed from, and translated again.</p>
+            <p>This reframing dissolves nothing. It relocates the argument from metaphysics to criticism, where it probably always belonged. What it costs is the comfort of a standard external to judgement. What it buys is a description of the practice that translators themselves would recognise.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="qlist">
+        <article class="q" data-id="v1">
+          <header><span class="id">V1</span><h3>The primary purpose of the passage is to:</h3><div class="tags"><span class="tag core">core</span></div></header>
+          <div class="body"><div class="opts">
+            <div><span>(a)</span> demonstrate that translation between languages is ultimately impossible</div>
+            <div><span>(b)</span> argue that the debate over fidelity should be replaced by a different standard of evaluation</div>
+            <div><span>(c)</span> defend the instrumentalist model against its critics</div>
+            <div><span>(d)</span> trace the historical development of theories of translation from Schleiermacher onward</div>
+          </div></div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>(b).</strong> The passage moves through instrumentalism, its opponents, an objection to those opponents, and lands on "a more defensible position abandons the question of fidelity altogether," replacing it with a performance standard. That arc <em>is</em> the purpose.</p>
+            <p><em class="why">(a) is the view the author explicitly rejects &mdash; "translation should be impossible, and yet it manifestly is not." (c) is a reversal trap: instrumentalism is described sympathetically for one paragraph, then left behind; describing is not defending. (d) is detail-as-main-idea &mdash; the names appear but no history is traced, they're compressed into one clause as a label.</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="v2">
+          <header><span class="id">V2</span><h3>According to the passage, a fluent translation is suspect because:</h3><div class="tags"></div></header>
+          <div class="body"><div class="opts">
+            <div><span>(a)</span> translators who aim at fluency tend to abridge difficult passages</div>
+            <div><span>(b)</span> the target language is rarely capable of reproducing the original's effects</div>
+            <div><span>(c)</span> the reader's sense of ease signals that the source's foreign assumptions have been replaced by familiar ones</div>
+            <div><span>(d)</span> fluency indicates the translator prioritised style over meaning</div>
+          </div></div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>(c).</strong> Directly supported: "fluency is precisely the sensation of encountering one's own assumptions."</p>
+            <p><em class="why">(b) and (d) are out of scope &mdash; plausible claims about translation the passage never makes. (a) invents a mechanism nowhere present.</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="v3">
+          <header><span class="id">V3</span><h3>The author says the Schleiermacher&ndash;Benjamin&ndash;Berman view "proves too much" in order to:</h3><div class="tags"></div></header>
+          <div class="body"><div class="opts">
+            <div><span>(a)</span> suggest the instrumentalist model is correct after all</div>
+            <div><span>(b)</span> show that the view's own logic would rule out an outcome that plainly occurs</div>
+            <div><span>(c)</span> argue that Benjamin misunderstood Schleiermacher's position</div>
+            <div><span>(d)</span> establish that untranslatability applies only to poetry, not argumentative prose</div>
+          </div></div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>(b).</strong> "Proves too much" is a term of art: the argument's own logic entails a conclusion we know to be false. The author spells it out &mdash; if untranslatability were constitutive, translation would be impossible, but "texts do cross."</p>
+            <p><em class="why">(a) is the trap for readers who assume rejecting one view means endorsing its opposite. The author rejects both and proposes a third. (c) and (d) are fabrication.</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="v4">
+          <header><span class="id">V4</span><h3>Which of the following, if true, would most weaken the author's analogy between translation and musical performance?</h3><div class="tags"><span class="tag core">core</span></div></header>
+          <div class="body"><div class="opts">
+            <div><span>(a)</span> Some musicians perform from memory rather than from a written score.</div>
+            <div><span>(b)</span> Audiences routinely disagree about which performance of a sonata is best.</div>
+            <div><span>(c)</span> Readers of translations, unlike listeners to sonatas, typically have no access to the original and so cannot recognise an intelligent reading as such.</div>
+            <div><span>(d)</span> Many working translators describe themselves as craftsmen rather than artists.</div>
+          </div></div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>(c).</strong> The analogy rests on judging a performance by whether "it hears things in the score that we had not heard." That requires the audience to have the score. If translation readers don't, the criterion is unusable and the analogy collapses at exactly its load-bearing point.</p>
+            <p><em class="why">(b) doesn't weaken anything &mdash; the author welcomes disagreement, having just said the cost of this position is "the comfort of a standard external to judgement." (a) and (d) are irrelevant detail.</em></p>
+            <p><strong>This is the highest-value question type in CAT VARC and it is pure logic, not reading.</strong> To weaken an analogy you attack the property the analogy depends on, not its surface. Find the load-bearing claim <em>before</em> you look at the options.</p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="v5">
+          <header><span class="id">V5</span><h3>Para-summary &mdash; discounting</h3><div class="tags"></div></header>
+          <div class="body">
+            <p style="color:var(--ink-2);border-left:2px solid var(--hair);padding-left:12px;">Economists have long assumed that people discount future rewards at a constant rate, so that a delay of one year is worth the same whether it begins today or a decade hence. Experimental evidence contradicts this: subjects who prefer &#8377;100 today to &#8377;110 tomorrow will nonetheless prefer &#8377;110 in 31 days to &#8377;100 in 30 days. The same one-day delay is judged differently depending on when it occurs. This pattern is not a random error; it is systematic and reproducible, and it implies that a person's ranking of options can reverse simply with the passage of time, without any new information arriving.</p>
+            <div class="opts">
+              <div><span>(a)</span> Experiments show people are irrational about money, so models built on rationality should be abandoned.</div>
+              <div><span>(b)</span> People value immediate rewards more than delayed ones, which explains why saving is difficult.</div>
+              <div><span>(c)</span> Evidence that an identical delay is weighted differently at different points in time contradicts constant discounting and implies preferences can reverse without new information.</div>
+              <div><span>(d)</span> Economists should conduct more experiments before assuming how people value future rewards.</div>
+            </div>
+          </div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>(c).</strong> Carries all three moves: the evidence, the target (constant discounting), and the implication (reversal without new information).</p>
+            <p><em class="why">(a) is too strong &mdash; "abandoned" appears nowhere; one assumption is attacked, not the enterprise. (b) is half-right: true of the setup, but it misses the actual finding, which is inconsistency across time, not mere impatience. (d) adds a recommendation the paragraph never makes.</em></p>
+            <p><strong>Rule:</strong> summary options that tell someone what to do are almost always wrong unless the paragraph itself prescribes.</p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="v6">
+          <header><span class="id">V6</span><h3>Odd one out &mdash; maps</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body">
+            <p>Three of these form a coherent set. Which one does not belong?</p>
+            <ol>
+              <li>The map's earliest function was not to help travellers find their way but to assert that a territory existed and belonged to someone.</li>
+              <li>Medieval European mappae mundi place Jerusalem at the centre, a decision about significance rather than geography.</li>
+              <li>Colonial surveyors drew boundaries across regions they had never walked, and those lines later hardened into the borders of states.</li>
+              <li>Modern satellite imaging has reduced the cost of producing an accurate map by several orders of magnitude.</li>
+            </ol>
+          </div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>4.</strong> Sentences 1&ndash;3 share a theme: maps as instruments of claim and authority rather than navigation. Sentence 4 is about cost and technology &mdash; a different register entirely.</p>
+            <p><em class="why">The odd one out is rarely off-topic. It is usually on-topic in a different register: specific vs general, mechanism vs consequence, descriptive vs evaluative, historical vs contemporary. Look for the shift in what kind of claim is being made, not in subject matter.</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="v7">
+          <header><span class="id">V7</span><h3>Para-jumble &mdash; the beauty contest</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body">
+            <ul style="list-style:none;padding-left:0;">
+              <li><strong>A.</strong> The result is a market in which the price of a share reflects not what investors believe about a company, but what they believe other investors believe.</li>
+              <li><strong>B.</strong> Keynes compared the stock market to a newspaper beauty contest in which readers win not by picking the prettiest face, but by picking the face most other readers will pick.</li>
+              <li><strong>C.</strong> Each participant is therefore reasoning about the reasoning of others, and knows that the others are doing the same.</li>
+              <li><strong>D.</strong> Under such conditions, information about the company itself can become almost irrelevant to short-horizon price movements.</li>
+            </ul>
+          </div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>BCAD.</strong> B opens &mdash; it introduces the analogy with no back-reference, so nothing can precede it. C follows with "therefore," drawing out the mechanism. A begins "The result is," which needs C's mechanism to be a result of. D begins "Under such conditions," extending the state A describes.</p>
+            <p><em class="why">The reliable anchors are the sentence with no back-reference (it opens) and the explicit connectives: therefore, the result is, under such conditions, however, by contrast. Find the connective chain and the order falls out without your needing to understand the content. And since this is TITA with no negative marking, type any order rather than leave it blank.</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="v8">
+          <header><span class="id">V8</span><h3>Para-summary &mdash; the jury</h3><div class="tags"></div></header>
+          <div class="body">
+            <p style="color:var(--ink-2);border-left:2px solid var(--hair);padding-left:12px;">The standard defence of the jury is that it introduces the judgement of ordinary people into a system otherwise run by specialists. But this defence concedes the critics' premise: that jurors are amateurs whose value lies in their amateurism. A stronger case notes that jurors are not asked to interpret law, only to determine what happened, and that determining what happened is not a specialist skill. On matters of credibility, inference and ordinary human motive, twelve people deliberating have no systematic disadvantage against one trained lawyer, and a structural advantage in the diversity of experience they bring.</p>
+            <div class="opts">
+              <div><span>(a)</span> Juries should be retained because ordinary citizens deserve a role in the legal system.</div>
+              <div><span>(b)</span> The usual defence of juries concedes too much; the better argument is that fact-finding is not a specialist skill and deliberating groups are well suited to it.</div>
+              <div><span>(c)</span> Jurors are better than judges at determining facts because they bring diverse life experiences.</div>
+              <div><span>(d)</span> Critics of the jury system misunderstand the distinction between interpreting law and determining facts.</div>
+            </div>
+          </div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>(b).</strong> The paragraph rejects the standard defence as conceding too much, then offers a better one. (b) is the only option carrying both moves.</p>
+            <p><em class="why">(a) is the standard defence the paragraph argues against &mdash; reversal. (c) is too strong: the passage claims "no systematic disadvantage," not superiority. (d) is half-right &mdash; the law/fact distinction is real and present, but it's a premise in the argument, not the argument.</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+      </div>
+
+      <div class="callout blue">
+        <p><strong>Where to get unlimited more, free.</strong> Past CAT papers from 2019&ndash;2025 are released officially at iimcat.ac.in and mirrored with solutions on Cracku, 2IIM and iQuanta. That's roughly 27 slots &mdash; about 1,800 questions at exactly the right difficulty, written by the people who write your exam. Pull three passages per session.</p>
+        <p><strong>Background reading, free, doesn't count against the 35 hours:</strong> Aeon, Psyche, 3 Quarks Daily, The Browser, London Review of Books, The Caravan. CAT passages are drawn from exactly this register. Read the hard ones &mdash; reading Quanta because it's comfortable trains nothing.</p>
+      </div>
+    </section>
+
+    <!-- ================= 04 DILR ================= -->
+    <section id="dilr" data-round="dilr">
+      <div class="sec-head">
+        <div class="eyebrow">Section 04</div>
+        <h2>DILR</h2>
+        <p>Three sets, 17 questions, 36 minutes. Spend the first four minutes reading all three and ranking them GO / MAYBE / NO &mdash; write the ranking down before you solve anything. Then twelve minutes per set, hard stop.</p>
+      </div>
+
+      <div class="note">
+        <div class="eyebrow">The taxonomy</div>
+        <h4>Name the set type in ten seconds</h4>
+        <p>Arrangement grid (people &times; attributes &times; positions) &middot; tournament or round-robin with partial results &middot; scheduling with precedence constraints &middot; voting and elimination rounds with redistribution &middot; network or flow (routes, capacities, costs) &middot; partially filled table with totals plus a logical rider &middot; Venn and set-overlap with min&ndash;max questions &middot; games with optimal play.</p>
+        <p>Every set has exactly one <strong>entry point</strong> &mdash; the constraint that collapses the possibility space first. Finding it in 90 seconds is the whole skill. Everything after it is bookkeeping you can already do.</p>
+      </div>
+
+      <div class="qlist">
+        <article class="q" data-id="d1">
+          <header><span class="id">D1</span><h3>Set 1 &mdash; The trading floor</h3><div class="tags"><span class="tag core">6 Q</span><span class="tag">grid</span></div></header>
+          <div class="body">
+            <p>Five traders &mdash; <strong>Arjun, Bela, Chirag, Divya, Esha</strong> &mdash; sit at desks numbered 1 to 5 left to right. Each covers exactly one of <strong>NIFTY, BANKNIFTY, RELIANCE, HDFC, INFY</strong>. Each has a distinct P&amp;L from <strong>{&minus;2, +1, +3, +5, +8}</strong> in &#8377; lakh.</p>
+            <ol>
+              <li>Chirag sits at desk 3 and his P&amp;L was +3.</li>
+              <li>The INFY trader sits at desk 1.</li>
+              <li>The trader at desk 5 had a P&amp;L of +8.</li>
+              <li>Divya was the only trader to lose money.</li>
+              <li>Bela's P&amp;L was higher than Arjun's, which was higher than Esha's.</li>
+              <li>Divya sits adjacent to Chirag.</li>
+              <li>The NIFTY trader sits immediately left of the BANKNIFTY trader.</li>
+              <li>The RELIANCE trader had a P&amp;L of +1.</li>
+              <li>Bela does not cover HDFC.</li>
+            </ol>
+            <p><strong>1.1</strong> Who covers HDFC? &nbsp;&middot;&nbsp; <strong>1.2</strong> P&amp;L of the trader at desk 2? &nbsp;&middot;&nbsp; <strong>1.3</strong> Divya's desk? &nbsp;&middot;&nbsp; <strong>1.4</strong> What does the trader immediately right of the RELIANCE trader cover? &nbsp;&middot;&nbsp; <strong>1.5</strong> Combined P&amp;L of desks 1 and 4? &nbsp;&middot;&nbsp; <strong>1.6</strong> If clue 9 were removed, how many complete arrangements would be possible?</p>
+          </div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>Entry point: clues 4 and 5 together.</strong> Divya is the only loss, so Divya = &minus;2. Chirag = +3. That leaves {+1, +5, +8} for the other three and clue 5 orders them completely: <strong>Bela +8, Arjun +5, Esha +1</strong>. All five P&amp;Ls are fixed before you place anyone. That's the collapse; everything after is forced.</p>
+            <ul>
+              <li>Desk 5 has +8 &rarr; Bela at desk 5. RELIANCE has +1 &rarr; Esha covers RELIANCE.</li>
+              <li>Desk 1 is INFY. Chirag is at 3, Bela at 5, Esha covers RELIANCE not INFY, and Divya must be at 2 or 4. So desk 1 is <strong>Arjun</strong>, on INFY.</li>
+              <li><em>Divya at 2, Esha at 4:</em> the only adjacent NIFTY/BANKNIFTY pair left is (2,3), forcing HDFC onto desk 5 = Bela. Violates clue 9. Dead.</li>
+              <li><em>Divya at 4, Esha at 2:</em> the pair sits at (3,4) or (4,5). (3,4) again forces HDFC onto Bela. So it's <strong>(4,5)</strong>, HDFC at desk 3.</li>
+            </ul>
+            <div class="tablewrap"><table>
+              <thead><tr><th>Desk</th><th class="num">1</th><th class="num">2</th><th class="num">3</th><th class="num">4</th><th class="num">5</th></tr></thead>
+              <tbody>
+                <tr><td>Trader</td><td class="num">Arjun</td><td class="num">Esha</td><td class="num">Chirag</td><td class="num">Divya</td><td class="num">Bela</td></tr>
+                <tr><td>Covers</td><td class="num">INFY</td><td class="num">RELIANCE</td><td class="num">HDFC</td><td class="num">NIFTY</td><td class="num">BANKNIFTY</td></tr>
+                <tr><td>P&amp;L</td><td class="num">+5</td><td class="num">+1</td><td class="num">+3</td><td class="num">&minus;2</td><td class="num">+8</td></tr>
+              </tbody>
+            </table></div>
+            <p><strong>1.1</strong> Chirag &nbsp;&middot;&nbsp; <strong>1.2</strong> +1 &nbsp;&middot;&nbsp; <strong>1.3</strong> Desk 4 &nbsp;&middot;&nbsp; <strong>1.4</strong> HDFC &nbsp;&middot;&nbsp; <strong>1.5</strong> +3 &nbsp;&middot;&nbsp; <strong>1.6</strong> 3.</p>
+            <p><em class="why">Lesson: clue 9 looks like a throwaway negative. It is the only thing making the set unique. In a grid set, always ask which constraint does the disambiguating work &mdash; that's the one you apply last, and forgetting it produces a set that "has no answer."</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="d2">
+          <header><span class="id">D2</span><h3>Set 2 &mdash; Round robin</h3><div class="tags"><span class="tag core">5 Q</span><span class="tag">tournament</span></div></header>
+          <div class="body">
+            <p>Four teams &mdash; <strong>P, Q, R, S</strong> &mdash; play a round robin, every pair once. Win 3, draw 1 each, loss 0. Final tally: <strong>P = 7, Q = 4, R = 4, S = 1</strong>. It is also known that <strong>R did not draw with S</strong>.</p>
+            <p><strong>2.1</strong> How many matches were drawn? &nbsp;&middot;&nbsp; <strong>2.2</strong> How many did S lose? &nbsp;&middot;&nbsp; <strong>2.3</strong> Which team definitely lost to R? &nbsp;&middot;&nbsp; <strong>2.4</strong> Which is certainly true: (a) Q drew with R (b) P beat Q (c) S drew with P (d) R lost to Q? &nbsp;&middot;&nbsp; <strong>2.5</strong> In how many distinct ways could the six results have occurred?</p>
+          </div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>Entry point: the points total, not the individual teams.</strong> Total = 16 across 6 matches. A decisive match puts 3 into the pot, a draw puts 2. So 3d + 2(6 &minus; d) = 16 &rarr; <strong>d = 4 decisive, 2 drawn</strong>.</p>
+            <p>Decompose: P = 3+3+1 (2W 1D). Q = 3+1+0. R = 3+1+0. S = 1+0+0. Every team drew exactly once, so the two draws pair up all four teams. Three pairings exist; "R did not draw with S" kills (P&ndash;Q, R&ndash;S). The other two both check out:</p>
+            <div class="tablewrap"><table>
+              <thead><tr><th></th><th>Scenario A</th><th>Scenario B</th></tr></thead>
+              <tbody>
+                <tr><td>Draws</td><td>P&ndash;S, Q&ndash;R</td><td>P&ndash;R, Q&ndash;S</td></tr>
+                <tr><td>P</td><td>beat Q, beat R</td><td>beat Q, beat S</td></tr>
+                <tr><td>Q</td><td>beat S, lost to P</td><td>beat R, lost to P</td></tr>
+                <tr><td>R</td><td>beat S, lost to P</td><td>beat S, lost to Q</td></tr>
+              </tbody>
+            </table></div>
+            <p><strong>2.1</strong> 2 &nbsp;&middot;&nbsp; <strong>2.2</strong> 2 &nbsp;&middot;&nbsp; <strong>2.3</strong> S (R beats S in both) &nbsp;&middot;&nbsp; <strong>2.4</strong> (b) P beat Q &mdash; true in both; (a) and (c) hold only in A, (d) only in B &nbsp;&middot;&nbsp; <strong>2.5</strong> 2.</p>
+            <p><em class="why">Lesson: an under-determined set is not a broken set. CAT builds these deliberately and then asks "must be true" and "cannot be determined" against them. Enumerate every valid scenario and keep them all live. Candidates who assume they've misread something burn five minutes re-reading and then abandon a set they had already solved.</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+
+        <article class="q" data-id="d3">
+          <header><span class="id">D3</span><h3>Set 3 &mdash; Desk P&amp;L</h3><div class="tags"><span class="tag core">6 Q</span><span class="tag">table</span></div></header>
+          <div class="body">
+            <p>Quarterly P&amp;L in &#8377; crore for four desks. Some figures withheld.</p>
+            <div class="tablewrap"><table>
+              <thead><tr><th>Desk</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th><th class="num">Q4</th><th class="num">Year</th></tr></thead>
+              <tbody>
+                <tr><td>Equity</td><td class="num">12</td><td class="num">&mdash;</td><td class="num">18</td><td class="num">&mdash;</td><td class="num">61</td></tr>
+                <tr><td>Commodity</td><td class="num">&mdash;</td><td class="num">9</td><td class="num">&mdash;</td><td class="num">14</td><td class="num">44</td></tr>
+                <tr><td>FX</td><td class="num">8</td><td class="num">&mdash;</td><td class="num">11</td><td class="num">7</td><td class="num">38</td></tr>
+                <tr><td>Rates</td><td class="num">&mdash;</td><td class="num">15</td><td class="num">&mdash;</td><td class="num">10</td><td class="num">48</td></tr>
+                <tr><td><strong>Total</strong></td><td class="num"><strong>40</strong></td><td class="num"><strong>47</strong></td><td class="num"><strong>53</strong></td><td class="num"><strong>51</strong></td><td class="num"><strong>191</strong></td></tr>
+              </tbody>
+            </table></div>
+            <p>Additionally: <strong>the Commodity desk's Q3 P&amp;L was exactly twice its Q1</strong>.</p>
+            <p><strong>3.1</strong> Equity Q4? &nbsp;&middot;&nbsp; <strong>3.2</strong> Largest percentage increase Q2&rarr;Q3? &nbsp;&middot;&nbsp; <strong>3.3</strong> In how many quarters did FX out-earn Rates? &nbsp;&middot;&nbsp; <strong>3.4</strong> Rates Q1? &nbsp;&middot;&nbsp; <strong>3.5</strong> Share of annual P&amp;L from the two best desks? &nbsp;&middot;&nbsp; <strong>3.6</strong> Drop the Commodity condition &mdash; which cell can no longer be determined: FX Q2, Equity Q2, Equity Q4, or Rates Q1?</p>
+          </div>
+          <details><summary>Answer</summary><div class="ans">
+            <p><strong>Entry point: the FX row</strong> &mdash; the only line with exactly one unknown. 8 + f + 11 + 7 = 38 &rarr; FX Q2 = <strong>12</strong>. That unlocks the Q2 column &rarr; Equity Q2 = <strong>11</strong>, then the Equity row &rarr; Equity Q4 = <strong>20</strong>. Commodity: c&#8321; + c&#8323; = 21 with c&#8323; = 2c&#8321; &rarr; <strong>7 and 14</strong>. Then Q1 gives Rates Q1 = <strong>13</strong> and Q3 gives Rates Q3 = <strong>10</strong>.</p>
+            <div class="tablewrap"><table>
+              <thead><tr><th>Desk</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th><th class="num">Q4</th><th class="num">Year</th></tr></thead>
+              <tbody>
+                <tr><td>Equity</td><td class="num">12</td><td class="num">11</td><td class="num">18</td><td class="num">20</td><td class="num">61</td></tr>
+                <tr><td>Commodity</td><td class="num">7</td><td class="num">9</td><td class="num">14</td><td class="num">14</td><td class="num">44</td></tr>
+                <tr><td>FX</td><td class="num">8</td><td class="num">12</td><td class="num">11</td><td class="num">7</td><td class="num">38</td></tr>
+                <tr><td>Rates</td><td class="num">13</td><td class="num">15</td><td class="num">10</td><td class="num">10</td><td class="num">48</td></tr>
+              </tbody>
+            </table></div>
+            <p><strong>3.1</strong> 20 &nbsp;&middot;&nbsp; <strong>3.2</strong> Equity (11&rarr;18 = +63.6% vs Commodity +55.6%; FX and Rates fell) &nbsp;&middot;&nbsp; <strong>3.3</strong> 1 (only Q3) &nbsp;&middot;&nbsp; <strong>3.4</strong> 13 &nbsp;&middot;&nbsp; <strong>3.5</strong> Equity 61 + Rates 48 = 109/191 &asymp; <strong>57%</strong> &nbsp;&middot;&nbsp; <strong>3.6</strong> Rates Q1 &mdash; the other three follow from row and column totals alone; Commodity and Rates have one degree of freedom between them without the rider.</p>
+            <p><em class="why">Lesson: never start at the top-left of a partial table. Scan for the row or column with exactly one unknown and cascade from there. The unlock order is the entire difficulty of the set &mdash; starting at Commodity Q1 is how people conclude it's unsolvable.</em></p>
+          </div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer>
+        </article>
+      </div>
+
+      <div class="callout blue">
+        <p><strong>Afterwards, check your GO / MAYBE / NO ranking against reality.</strong> That calibration &mdash; not your solve speed &mdash; is what this exercise trains. On the real exam you rank four sets and solve three; if the ranking is wrong you've lost the section before solving a single question.</p>
+      </div>
+    </section>
+
+    <!-- ================= 05 QA ================= -->
+    <section id="qa" data-round="qa">
+      <div class="sec-head">
+        <div class="eyebrow">Section 05</div>
+        <h2>QA</h2>
+        <p>Full sectional simulation: 22 questions, 40 minutes, three-pass method. <strong>Q14, Q20 and Q22 are deliberate time sinks.</strong> A good run leaves four or five questions untouched &mdash; the point of this set is practising abandonment, not scoring.</p>
+      </div>
+
+      <div class="qlist">
+        <article class="q" data-id="q1"><header><span class="id">Q1</span><h3>False weight plus markup and discount</h3><div class="tags"></div></header>
+          <div class="body"><p>A shopkeeper uses a 900 g weight while claiming to sell one kilogram. He also marks goods 25% above cost and then offers a 10% discount on the marked price. Overall profit percentage?</p><div class="opts"><div><span>(a)</span> 12.5%</div><div><span>(b)</span> 15%</div><div><span>(c)</span> 22.5%</div><div><span>(d)</span> 25%</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(d) 25%.</strong> Cost = &#8377;1/g. The customer pays for 1 kg: MP = 1250, SP = 0.9 &times; 1250 = 1125. Goods handed over = 900 g, costing 900. Profit = 225/900 = 25%.</p><p><em class="why">The two cheats compound on different bases &mdash; the weight cheat on quantity, the markup and discount on price. Don't add 25% and 12.5%.</em></p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q2"><header><span class="id">Q2</span><h3>Two trains, meeting point</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>Two trains leave A and B simultaneously towards each other and meet after 6 hours. The train from A then takes 4 more hours to reach B. How many more hours after the meeting does the train from B take to reach A?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>9.</strong> Before meeting, the A-train covers 6u and has 6v left, taking 6v/u = 4, so v/u = 2/3. The B-train has 6u left, taking 6u/v = 9.</p><p><em class="why">Memorise the shortcut: meet after t, then take a and b more hours &rarr; t = &radic;(ab). Here 6 = &radic;(4b) &rarr; b = 9. A 90-second question becomes a 10-second one.</em></p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q3"><header><span class="id">Q3</span><h3>A leaves, B finishes</h3><div class="tags"></div></header>
+          <div class="body"><p>A and B together finish a job in 12 days. They work together 5 days, A leaves, and B completes the rest in 21 days. How long would A alone take?</p><div class="opts"><div><span>(a)</span> 15</div><div><span>(b)</span> 18</div><div><span>(c)</span> 20</div><div><span>(d)</span> 24</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(b) 18.</strong> Combined rate 1/12. Five days leaves 7/12. B does 7/12 in 21 days &rarr; B = 1/36. A = 1/12 &minus; 1/36 = 1/18.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q4"><header><span class="id">Q4</span><h3>Milk and water, draw and replace</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>80 litres of milk&ndash;water in ratio 5:3. Some mixture is drawn out and replaced by pure water; the ratio becomes 1:1. How many litres were drawn out?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>16.</strong> Milk starts at 50; volume stays 80, so a 1:1 final ratio means milk = 40. Drawing x litres removes 5x/8 of milk: 50 &minus; 5x/8 = 40 &rarr; x = 16.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q5"><header><span class="id">Q5</span><h3>Maximise the second largest</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>Five distinct positive integers average 20. The largest is 40. Maximum possible value of the second largest?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>39.</strong> Sum = 100. Distinctness caps the second largest at 39; check feasibility &mdash; the other three must be distinct positive integers summing to 21, e.g. 1 + 2 + 18.</p><p><em class="why">Classic maximise-one-by-minimising-the-rest, but you must verify feasibility. Blindly setting the bottom three to 1, 2, 3 gives 54, which violates "largest = 40."</em></p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q6"><header><span class="id">Q6</span><h3>Consecutive-integer roots</h3><div class="tags"></div></header>
+          <div class="body"><p>Both roots of x&sup2; &minus; px + q = 0 are consecutive integers. Which must be true?</p><div class="opts"><div><span>(a)</span> p&sup2; &minus; 4q = 1</div><div><span>(b)</span> p&sup2; = 4q</div><div><span>(c)</span> p&sup2; &minus; 4q = 2</div><div><span>(d)</span> p = q</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(a).</strong> p&sup2; &minus; 4q is the discriminant, which equals (difference of roots)&sup2; = 1&sup2; = 1. Two seconds if you see it; 40 if you expand (2n+1)&sup2; &minus; 4n(n+1).</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q7"><header><span class="id">Q7</span><h3>Three logs, one base</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>log&#8322;x + log&#8324;x + log&#8321;&#8326;x = 7. Find x.</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>16.</strong> With t = log&#8322;x: t(1 + &frac12; + &frac14;) = 7 &rarr; (7/4)t = 7 &rarr; t = 4.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q8"><header><span class="id">Q8</span><h3>Sum of two moduli</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>How many integer values of x satisfy |x &minus; 3| + |x + 2| &le; 9?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>10.</strong> The expression is the sum of distances from 3 and &minus;2, minimum 5 on [&minus;2, 3]. Right of 3: 2x &minus; 1 &le; 9 &rarr; x &le; 5. Left of &minus;2: 1 &minus; 2x &le; 9 &rarr; x &ge; &minus;4. So x &isin; [&minus;4, 5].</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q9"><header><span class="id">Q9</span><h3>Last two digits of 7&#185;&#8304;&sup3;</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>Remainder when 7&#185;&#8304;&sup3; is divided by 100?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>43.</strong> 7&#185; = 7, 7&sup2; = 49, 7&sup3; &equiv; 43, 7&#8308; &equiv; 1 (mod 100). Cycle 4; 103 &equiv; 3.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q10"><header><span class="id">Q10</span><h3>Perfect-square factors</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>How many factors of 2&#8309; &times; 3&#8310; &times; 5&sup2; are perfect squares?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>24.</strong> Even exponents only: {0,2,4} &times; {0,2,4,6} &times; {0,2} = 3 &times; 4 &times; 2.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q11"><header><span class="id">Q11</span><h3>Altitude in a 13-14-15 triangle</h3><div class="tags"></div></header>
+          <div class="body"><p>In triangle ABC, AB = 13, BC = 14, CA = 15. Length of the altitude from A to BC?</p><div class="opts"><div><span>(a)</span> 11</div><div><span>(b)</span> 12</div><div><span>(c)</span> 12.5</div><div><span>(d)</span> 13</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(b) 12.</strong> Heron: s = 21, area = &radic;7056 = 84, so 84 = &frac12;(14)h.</p><p><em class="why">13-14-15 is a standard CAT triangle &mdash; two 3-4-5-family right triangles glued along an altitude of 12 (splitting the base into 5 and 9). Recognise it and skip Heron entirely.</em></p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q12"><header><span class="id">Q12</span><h3>Inradius of a right triangle</h3><div class="tags"></div></header>
+          <div class="body"><p>A circle is inscribed in a right triangle with legs 6 and 8. Radius?</p><div class="opts"><div><span>(a)</span> 1.5</div><div><span>(b)</span> 2</div><div><span>(c)</span> 2.4</div><div><span>(d)</span> 3</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(b) 2.</strong> For a right triangle, r = (a + b &minus; c)/2 = (6 + 8 &minus; 10)/2.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q13"><header><span class="id">Q13</span><h3>Cylinder into spheres</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>A solid cylinder of radius 3 and height 8 is melted and recast into spheres of radius 1. How many complete spheres?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>54.</strong> 72&pi; &divide; (4&pi;/3).</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q14"><header><span class="id">Q14</span><h3>PERMUTE, no two vowels adjacent</h3><div class="tags"><span class="tag hard">time sink</span><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>In how many ways can the letters of PERMUTE be arranged so that no two vowels are adjacent?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>720.</strong> Consonants P, R, M, T &rarr; 4! = 24. Five gaps; choose 3 and place E, E, U one per gap: C(5,3) &times; 3!/2! = 10 &times; 3 = 30. Total 24 &times; 30.</p><p><em class="why">The repeated E is the trap &mdash; dividing by 2! at the wrong stage is the standard error. On a first pass this is a skip: slow and error-prone for the same 3 marks as Q1.</em></p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q15"><header><span class="id">Q15</span><h3>Conditional on an even sum</h3><div class="tags"></div></header>
+          <div class="body"><p>Two fair dice. Given the sum is even, probability both show the same number?</p><div class="opts"><div><span>(a)</span> 1/6</div><div><span>(b)</span> 1/4</div><div><span>(c)</span> 1/3</div><div><span>(d)</span> 1/2</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(c) 1/3.</strong> Even sum = both odd (9) or both even (9) = 18. Doubles = 6, all with even sums. 6/18.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q16"><header><span class="id">Q16</span><h3>AP from its sum</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>The sum of the first n terms of an AP is 3n&sup2; + 5n. Its 10th term?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>62.</strong> a&#8345; = S&#8345; &minus; S&#8345;&#8331;&#8321; = 6n + 2.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q17"><header><span class="id">Q17</span><h3>A function composed three times</h3><div class="tags"></div></header>
+          <div class="body"><p>f(x) = x/(x &minus; 1) for x &ne; 1. Then f(f(f(x))) equals:</p><div class="opts"><div><span>(a)</span> x</div><div><span>(b)</span> x/(x &minus; 1)</div><div><span>(c)</span> (x &minus; 1)/x</div><div><span>(d)</span> 1/(1 &minus; x)</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(b).</strong> f(f(x)) = [x/(x&minus;1)] &divide; [1/(x&minus;1)] = x, so f is its own inverse, f&sup2; is the identity, and f&sup3; = f.</p><p><em class="why">Or plug x = 3: f(3) = 1.5, f(1.5) = 3, f(3) = 1.5. Only (b) gives 1.5. Plugging beats algebra on most MCQ function questions.</em></p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q18"><header><span class="id">Q18</span><h3>Boat, stream, round trip</h3><div class="tags"><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>A boat covers 30 km downstream and 30 km back in 8 hours. Stream speed 2 km/h. Speed of the boat in still water?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>8 km/h.</strong> 30/(b+2) + 30/(b&minus;2) = 8 &rarr; 2b&sup2; &minus; 15b &minus; 8 = 0 &rarr; b = 8.</p><p><em class="why">Faster: try sensible integers. b = 8 gives 3 + 5 = 8. Fifteen seconds. Don't reach for the quadratic when the answer is a small integer.</em></p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q19"><header><span class="id">Q19</span><h3>Doubling to eightfold</h3><div class="tags"></div></header>
+          <div class="body"><p>A sum at compound interest doubles in 8 years. In how many years is it eight times?</p><div class="opts"><div><span>(a)</span> 16</div><div><span>(b)</span> 20</div><div><span>(c)</span> 24</div><div><span>(d)</span> 32</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(c) 24.</strong> 8 = 2&sup3;, so three doublings. Compound growth is multiplicative &mdash; do not scale linearly.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q20"><header><span class="id">Q20</span><h3>Half a rotated square</h3><div class="tags"><span class="tag hard">time sink</span><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>Area of the region satisfying both |x| + |y| &le; 4 and x &ge; 0?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>16.</strong> |x| + |y| &le; 4 is a square rotated 45&deg; with both diagonals 8, area = &frac12;(8)(8) = 32. x &ge; 0 takes exactly half by symmetry.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q21"><header><span class="id">Q21</span><h3>Class average, split by ratio</h3><div class="tags"></div></header>
+          <div class="body"><p>Boys to girls is 3:2. Boys average 68, the class averages 72. Girls' average?</p><div class="opts"><div><span>(a)</span> 74</div><div><span>(b)</span> 76</div><div><span>(c)</span> 78</div><div><span>(d)</span> 80</div></div></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>(c) 78.</strong> Alligation is fastest: boys are 4 below the mean and the ratio is 3:2, so girls are (3/2)(4) = 6 above. 72 + 6 = 78.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+
+        <article class="q" data-id="q22"><header><span class="id">Q22</span><h3>Reciprocals summing to 1/12</h3><div class="tags"><span class="tag hard">time sink</span><span class="tag tita">tita</span></div></header>
+          <div class="body"><p>How many ordered pairs of positive integers (a, b) satisfy 1/a + 1/b = 1/12?</p></div>
+          <details><summary>Answer</summary><div class="ans"><p><strong>15.</strong> Rearranges to (a &minus; 12)(b &minus; 12) = 144. Both factors must be positive &mdash; if both were negative, a and b are under 12 and the largest product is 11 &times; 11 = 121 &lt; 144. So the count is the number of divisors of 144 = 2&#8308; &times; 3&sup2;, i.e. 5 &times; 3 = 15.</p></div></details>
+          <footer><label><input type="checkbox" class="done"> Done</label><label class="flag"><input type="checkbox" class="flagged"> Needs work</label></footer></article>
+      </div>
+
+      <div class="callout">
+        <p><strong>The post-mortem that matters.</strong> If you took Q14, Q20 and Q22 on the first pass and ran out of time for Q1, Q3 and Q21 &mdash; which are 60-second arithmetic questions &mdash; that is a <em>selection</em> failure, not a maths failure, and it is the single most important thing this set can teach you. Also record your longest single question. If it's over three minutes, that's your finding regardless of score.</p>
+      </div>
+    </section>
+
+    <!-- ================= 06 DRILLS ================= -->
+    <section id="drills">
+      <div class="sec-head">
+        <div class="eyebrow">Section 06</div>
+        <h2>Drills</h2>
+        <p>Three instruments: a score-to-percentile converter for calibrating any mock, a timed arithmetic drill, and a sectional clock.</p>
+      </div>
+
+      <div class="tool">
+        <div>
+          <div class="eyebrow">Calibration</div>
+          <h3>Attempts to percentile</h3>
+        </div>
+        <p>Enter attempts and correct per section. Raw assumes every wrong answer was an MCQ, which is conservative &mdash; TITA errors cost nothing, so your real score is usually a point or two higher. Percentile curves are approximate and move &plusmn;5 marks year to year. <strong>Pre-filled with the target paper from the brief.</strong></p>
+        <div class="calcgrid">
+          <div class="calcrow">
+            <h4>VARC <em>/ 24 Q &middot; 72 marks</em></h4>
+            <div class="pair">
+              <label for="vA">Attempted<input type="number" id="vA" min="0" max="24" value="17"></label>
+              <label for="vC">Correct<input type="number" id="vC" min="0" max="24" value="12"></label>
+            </div>
+            <div class="out"><span>raw <b id="vRaw">&mdash;</b></span><span>%ile <b id="vPct">&mdash;</b></span></div>
+          </div>
+          <div class="calcrow">
+            <h4>DILR <em>/ 22 Q &middot; 66 marks</em></h4>
+            <div class="pair">
+              <label for="dA">Attempted<input type="number" id="dA" min="0" max="22" value="17"></label>
+              <label for="dC">Correct<input type="number" id="dC" min="0" max="22" value="14"></label>
+            </div>
+            <div class="out"><span>raw <b id="dRaw">&mdash;</b></span><span>%ile <b id="dPct">&mdash;</b></span></div>
+          </div>
+          <div class="calcrow">
+            <h4>QA <em>/ 22 Q &middot; 66 marks</em></h4>
+            <div class="pair">
+              <label for="qA">Attempted<input type="number" id="qA" min="0" max="22" value="18"></label>
+              <label for="qC">Correct<input type="number" id="qC" min="0" max="22" value="16"></label>
+            </div>
+            <div class="out"><span>raw <b id="qRaw">&mdash;</b></span><span>%ile <b id="qPct">&mdash;</b></span></div>
+          </div>
+        </div>
+        <div class="stats">
+          <div><b id="totRaw">&mdash;</b><span>total raw / 204</span></div>
+          <div><b id="totPct">&mdash;</b><span>overall percentile</span></div>
+          <div><b id="totAcc">&mdash;</b><span>accuracy</span></div>
+          <div id="floorBox"><b id="floorState">&mdash;</b><span>sectional floor (85th VARC)</span></div>
+        </div>
+      </div>
+
+      <div class="tool" id="arith">
+        <div>
+          <div class="eyebrow">QA speed</div>
+          <h3>Arithmetic drill</h3>
+        </div>
+        <p>Twenty questions against the clock, target 75 seconds each. No written long division &mdash; force yourself into ratios, percentages-as-fractions and approximation. You should clear all twenty inside 18 minutes by November.</p>
+        <div class="drill-q" id="aQ">Press Start</div>
+        <div class="toolbar">
+          <label class="sr" for="aIn">Your answer</label>
+          <input class="big" id="aIn" type="number" step="any" inputmode="decimal" disabled>
+          <button class="btn primary" id="aStart">Start</button>
+          <button class="btn" id="aSubmit" disabled>Submit</button>
+          <button class="btn" id="aSkip" disabled>Skip</button>
+        </div>
+        <div class="feedback" id="aFeed"></div>
+        <div class="stats">
+          <div><b id="aN">0/20</b><span>question</span></div>
+          <div><b id="aRight">0</b><span>correct</span></div>
+          <div><b id="aRate">&mdash;</b><span>accuracy</span></div>
+          <div><b id="aTime">&mdash;</b><span>avg seconds</span></div>
+          <div><b id="aSlow">0</b><span>over 90s</span></div>
+        </div>
+      </div>
+
+      <div class="tool">
+        <div>
+          <div class="eyebrow">Discipline</div>
+          <h3>Sectional clock</h3>
+        </div>
+        <p>Forty minutes, the way the real thing runs. The markers below are the pass boundaries from the playbook &mdash; when the clock crosses one, you move whether or not you're finished.</p>
+        <div class="timer-face" id="tFace">40:00</div>
+        <div class="toolbar">
+          <button class="btn primary" id="tStart">Start</button>
+          <button class="btn" id="tPause" disabled>Pause</button>
+          <button class="btn" id="tReset">Reset</button>
+          <span class="feedback" id="tPhase">VARC: triage all four passages first</span>
+        </div>
+        <div class="toolbar">
+          <button class="btn small" data-mode="varc">VARC markers</button>
+          <button class="btn small" data-mode="dilr">DILR markers</button>
+          <button class="btn small" data-mode="qa">QA markers</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 07 MOCK LOG ================= -->
+    <section id="log">
+      <div class="sec-head">
+        <div class="eyebrow">Section 07</div>
+        <h2>Mock log</h2>
+        <p>Enter section raw scores after each mock; the total and estimated percentile compute themselves. Saves in this browser. A mock you don't analyse is two hours thrown away &mdash; the three rules you write after each one are the actual deliverable.</p>
+      </div>
+
+      <div class="tablewrap logtable">
+        <table>
+          <thead><tr><th>Mock</th><th>Date</th><th class="num">VARC /72</th><th class="num">DILR /66</th><th class="num">QA /66</th><th class="num">Total</th><th class="num">Est. %ile</th></tr></thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+
+      <div class="grid2">
+        <div class="note">
+          <div class="eyebrow">Tag every miss</div>
+          <h4>Five tags, and what each one means</h4>
+          <ul>
+            <li><strong>Knowledge</strong> &mdash; didn't know the concept. Should be near zero in QA. If not, name the topic and fix it directly.</li>
+            <li><strong>Slow</strong> &mdash; knew it, ran out of time. Arithmetic drills; stop writing full working.</li>
+            <li><strong>Careless</strong> &mdash; knew it, executed wrong. Each one is a 4-mark swing, +3 to &minus;1. The most expensive category.</li>
+            <li><strong>Selection</strong> &mdash; shouldn't have opened it. Re-read the playbook and run set-selection drills.</li>
+            <li><strong>Blind</strong> &mdash; read it, no idea where to start. More set-type exposure, fast, abandoning early.</li>
+          </ul>
+        </div>
+        <div class="note">
+          <div class="eyebrow">The analysis, 75 minutes</div>
+          <h4>Same day, never skipped</h4>
+          <ol>
+            <li><strong>15 min</strong> &mdash; re-tag every miss, log the counts.</li>
+            <li><strong>20 min</strong> &mdash; the selection audit, ignoring right and wrong. Which questions did I open that I should have passed on? Which did I skip that I'd have solved in 60 seconds? Did I read all four DILR sets first? Did I abandon at 12 minutes? How long was my longest QA question?</li>
+            <li><strong>25 min</strong> &mdash; re-solve everything missed, on paper. Not read. Solved.</li>
+            <li><strong>15 min</strong> &mdash; write three concrete behavioural rules for next time. Not "be more careful."</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 08 LOGISTICS ================= -->
+    <section id="logistics">
+      <div class="sec-head">
+        <div class="eyebrow">Section 08</div>
+        <h2>Exam day</h2>
+        <p>Sunday 29 November 2026. Three slots. Registration is done; the admit card arrives around early November.</p>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:130px">When</th><th>What</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Early Nov</strong></td><td>Admit card released. Note your allotted slot &mdash; the final mock on 21 Nov runs at that exact time.</td></tr>
+            <tr><td><strong>Week of 23 Nov</strong></td><td>Travel to the test centre once and look at it. Know the gate, the parking, the travel time at that hour on a Sunday.</td></tr>
+            <tr><td><strong>Fri 27 Nov</strong></td><td>Re-read the playbook. That is the last prep act.</td></tr>
+            <tr><td><strong>Sat 28 Nov</strong></td><td>Nothing. Sleep. This is an instruction, not a pleasantry.</td></tr>
+            <tr><td><strong>Exam morning</strong></td><td>Eat normally, nothing new. Normal caffeine dose &mdash; today is not the day to change it in either direction. Arrive 90 minutes early; biometrics and verification take real time.</td></tr>
+            <tr><td><strong>Carry</strong></td><td>Printed admit card and the exact original photo ID you registered with. Nothing else is needed and most things are not allowed.</td></tr>
+            <tr><td><strong>Minute 0</strong></td><td>VARC. It will feel bad. That is the design.</td></tr>
+            <tr><td><strong>Between sections</strong></td><td>Three slow breaths. No reviewing &mdash; you cannot go back and the score is unknowable.</td></tr>
+            <tr><td><strong>Minute 40</strong></td><td>DILR. Five minutes reading before you solve anything. This is the moment the exam turns on.</td></tr>
+            <tr><td><strong>Minute 80</strong></td><td>QA. Pass 1 is a sprint.</td></tr>
+            <tr><td><strong>After</strong></td><td>Don't discuss the paper, don't check answer keys. Nothing you learn is actionable.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout blue">
+        <p>Results come out in early January. IIM shortlists follow through January and February. Nothing between 29 November and then is worth a minute of your attention.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- storage ---------------- */
+  var KEY = "cat2026.desk.v1";
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || "{}") || {}; }
+    catch (e) { return {}; }
+  }
+  function save(s) {
+    try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* private mode */ }
+  }
+  var state = load();
+  if (!state.done) state.done = {};
+  if (!state.flag) state.flag = {};
+  if (!state.log) state.log = {};
+
+  /* ---------------- countdown ---------------- */
+  var EXAM = new Date(2026, 10, 29, 8, 30, 0); // 29 Nov 2026
+  (function countdown() {
+    var el = document.getElementById("dday");
+    var sub = document.getElementById("ddaySub");
+    var ms = EXAM - new Date();
+    var days = Math.ceil(ms / 86400000);
+    if (days > 1) { el.textContent = days; sub.textContent = "days to the exam"; }
+    else if (days === 1) { el.textContent = "1"; sub.textContent = "day to the exam"; }
+    else if (days === 0) { el.textContent = "today"; sub.textContent = "29 November 2026"; }
+    else { el.textContent = "done"; sub.textContent = "results in early January"; }
+  })();
+
+  /* ---------------- section links ---------------- */
+  // Hash navigation is blocked in some sandboxed and data: contexts; scrollIntoView is not.
+  document.querySelectorAll('nav.rounds a[href^="#"]').forEach(function (link) {
+    link.addEventListener("click", function () {
+      var target = document.getElementById(link.getAttribute("href").slice(1));
+      if (target) target.scrollIntoView();
+    });
+  });
+
+  /* ---------------- progress ---------------- */
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".q[data-id]"))
+    .filter(function (c) { return c.querySelector("input.done"); });
+
+  function syncCard(card) {
+    var id = card.getAttribute("data-id");
+    var d = card.querySelector("input.done");
+    var f = card.querySelector("input.flagged");
+    if (d) { d.checked = !!state.done[id]; card.classList.toggle("done", d.checked); }
+    if (f) f.checked = !!state.flag[id];
+  }
+
+  function refresh() {
+    var done = 0, flagged = 0;
+    cards.forEach(function (c) {
+      var id = c.getAttribute("data-id");
+      if (state.done[id]) done++;
+      if (state.flag[id]) flagged++;
+    });
+    document.getElementById("doneN").textContent = done;
+    document.getElementById("totalN").textContent = cards.length;
+    document.getElementById("flagN").textContent = flagged;
+    document.getElementById("bar").style.width = cards.length ? (done / cards.length * 100) + "%" : "0%";
+
+    document.querySelectorAll("nav.rounds .n[data-count]").forEach(function (n) {
+      var round = n.getAttribute("data-count");
+      var sec = document.querySelector('section[data-round="' + round + '"]');
+      if (!sec) return;
+      var qs = Array.prototype.slice.call(sec.querySelectorAll(".q[data-id]"))
+        .filter(function (c) { return c.querySelector("input.done"); });
+      var dn = qs.filter(function (c) { return state.done[c.getAttribute("data-id")]; }).length;
+      n.textContent = dn + "/" + qs.length;
+    });
+  }
+
+  cards.forEach(function (card) {
+    var id = card.getAttribute("data-id");
+    syncCard(card);
+    var d = card.querySelector("input.done");
+    var f = card.querySelector("input.flagged");
+    if (d) d.addEventListener("change", function () {
+      state.done[id] = d.checked;
+      card.classList.toggle("done", d.checked);
+      save(state); refresh();
+    });
+    if (f) f.addEventListener("change", function () {
+      state.flag[id] = f.checked; save(state); refresh();
+    });
+  });
+  refresh();
+
+  document.getElementById("reset").addEventListener("click", function () {
+    state = { done: {}, flag: {}, log: {} };
+    save(state);
+    cards.forEach(syncCard);
+    refresh();
+    buildLog();
+  });
+
+  /* ---------------- percentile curves ---------------- */
+  // [raw, percentile] anchors. Approximate; real curves move a few marks each year.
+  var CURVE = {
+    overall: [[0,0],[20,60],[30,73],[45,85],[58,90],[73,95],[85,97],[105,99],[128,99.5],[155,99.9],[204,100]],
+    varc:    [[0,0],[12,55],[18,68],[26,80],[34,90],[41,95],[49,99],[54,99.5],[72,100]],
+    dilr:    [[0,0],[6,60],[12,80],[18,90],[23,95],[32,99],[38,99.5],[66,100]],
+    qa:      [[0,0],[6,55],[13,80],[21,90],[27,95],[37,99],[43,99.5],[66,100]]
+  };
+
+  function pctile(which, raw) {
+    var pts = CURVE[which];
+    if (raw <= pts[0][0]) return pts[0][1];
+    for (var i = 1; i < pts.length; i++) {
+      if (raw <= pts[i][0]) {
+        var a = pts[i - 1], b = pts[i];
+        var t = (raw - a[0]) / (b[0] - a[0]);
+        return a[1] + t * (b[1] - a[1]);
+      }
+    }
+    return 100;
+  }
+  function fmtPct(p) { return p >= 99 ? p.toFixed(1) : Math.round(p).toString(); }
+
+  /* ---------------- calculator ---------------- */
+  function num(id) { var v = parseFloat(document.getElementById(id).value); return isFinite(v) ? v : 0; }
+
+  function calc() {
+    var secs = [
+      { a: "vA", c: "vC", raw: "vRaw", pct: "vPct", key: "varc", max: 24 },
+      { a: "dA", c: "dC", raw: "dRaw", pct: "dPct", key: "dilr", max: 22 },
+      { a: "qA", c: "qC", raw: "qRaw", pct: "qPct", key: "qa",   max: 22 }
+    ];
+    var totalRaw = 0, totalAtt = 0, totalCorr = 0, varcPct = 0;
+    secs.forEach(function (s) {
+      var att = Math.max(0, Math.min(s.max, num(s.a)));
+      var cor = Math.max(0, Math.min(att, num(s.c)));
+      var raw = 3 * cor - (att - cor);
+      var p = pctile(s.key, raw);
+      if (s.key === "varc") varcPct = p;
+      document.getElementById(s.raw).textContent = raw;
+      document.getElementById(s.pct).textContent = fmtPct(p);
+      totalRaw += raw; totalAtt += att; totalCorr += cor;
+    });
+    document.getElementById("totRaw").textContent = totalRaw;
+    document.getElementById("totPct").textContent = fmtPct(pctile("overall", totalRaw));
+    document.getElementById("totAcc").textContent = totalAtt ? Math.round(totalCorr / totalAtt * 100) + "%" : "—";
+    var box = document.getElementById("floorBox");
+    var st = document.getElementById("floorState");
+    if (varcPct >= 85) { st.textContent = "clear"; box.className = "good"; }
+    else { st.textContent = "below"; box.className = "bad"; }
+  }
+  ["vA","vC","dA","dC","qA","qC"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", calc);
+  });
+  calc();
+
+  /* ---------------- arithmetic drill ---------------- */
+  function ri(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  var GEN = [
+    function () { // percentage of
+      var p = pick([10, 15, 20, 25, 30, 40, 60, 75, 80]);
+      var n = ri(4, 45) * 20;
+      return { q: p + "% of " + n, a: p * n / 100 };
+    },
+    function () { // a is what % of b
+      // b a multiple of 20 and k a multiple of 5 keep a = kb/100 whole
+      var b = pick([40, 60, 80, 120, 140, 160, 180, 240, 320, 360]);
+      var k = pick([5, 15, 20, 25, 35, 40, 45, 60, 65, 75, 85]);
+      var a = k * b / 100;
+      return { q: a + " is what % of " + b + "?", a: k };
+    },
+    function () { // markup then discount -> profit %
+      var pairs = [[20,10,8],[25,20,0],[40,25,5],[50,20,20],[60,25,20],[25,10,12.5],[50,10,35]];
+      var t = pick(pairs);
+      return { q: "Mark up " + t[0] + "%, discount " + t[1] + "%. Profit %?", a: t[2] };
+    },
+    function () { // successive change
+      var a = pick([10, 20, 25, 30, 40, 50]);
+      var b = pick([10, 20, 25, 30]);
+      return { q: "Up " + a + "%, then down " + b + "%. Net % change?", a: +(a - b - a * b / 100).toFixed(2) };
+    },
+    function () { // km/h to m/s
+      var x = pick([36, 54, 72, 90, 108, 126, 144]);
+      return { q: x + " km/h in m/s", a: x * 5 / 18 };
+    },
+    function () { // average on removal
+      var n = ri(6, 12);
+      var avg = ri(30, 60);
+      var nw = avg - ri(1, 4);
+      return { q: "Average of " + n + " numbers is " + avg + ". Remove one and the average becomes " + nw + ". The removed number?", a: n * avg - (n - 1) * nw };
+    },
+    function () { // ratio split
+      // coprime pairs, smaller first, so the ratio is always in lowest terms
+      var r = pick([[2, 3], [3, 5], [4, 7], [5, 8], [7, 9], [3, 8], [5, 9], [2, 7], [4, 9], [7, 11]]);
+      var unit = ri(3, 40) * 10;
+      var T = (r[0] + r[1]) * unit;
+      var shown = Math.random() < 0.5 ? r[0] + ":" + r[1] : r[1] + ":" + r[0];
+      return { q: "Split ₹" + T + " in the ratio " + shown + ". Larger share?", a: r[1] * unit };
+    },
+    function () { // CP from SP and loss/profit
+      var cp = ri(5, 60) * 20;
+      var d = pick([10, 20, 25]);
+      var sp = cp * (100 - d) / 100;
+      return { q: "Sold at ₹" + sp + " at a " + d + "% loss. Cost price?", a: cp };
+    },
+    function () { // pipes
+      var pairs = [[12,18,36],[10,15,30],[20,30,60],[6,12,24],[15,10,30]];
+      var t = pick(pairs);
+      return { q: "Pipes fill in " + t[0] + " and " + t[1] + " min; a third empties in " + t[2] + " min. All open, minutes to fill?", a: +(1 / (1 / t[0] + 1 / t[1] - 1 / t[2])).toFixed(2) };
+    },
+    function () { // harmonic mean speed
+      var pairs = [[40,60,48],[30,60,40],[20,30,24],[50,75,60],[60,90,72]];
+      var t = pick(pairs);
+      return { q: "First half at " + t[0] + " km/h, second half at " + t[1] + " km/h. Average speed?", a: t[2] };
+    }
+  ];
+
+  var aState = null;
+  var aQ = document.getElementById("aQ"), aIn = document.getElementById("aIn"),
+      aFeed = document.getElementById("aFeed"), aStart = document.getElementById("aStart"),
+      aSubmit = document.getElementById("aSubmit"), aSkip = document.getElementById("aSkip");
+
+  function aStats() {
+    document.getElementById("aN").textContent = Math.min(aState.i + 1, 20) + "/20";
+    document.getElementById("aRight").textContent = aState.right;
+    var seen = aState.i;
+    document.getElementById("aRate").textContent = seen ? Math.round(aState.right / seen * 100) + "%" : "—";
+    document.getElementById("aTime").textContent = seen ? (aState.total / seen / 1000).toFixed(1) : "—";
+    document.getElementById("aSlow").textContent = aState.slow;
+  }
+
+  function aNext() {
+    if (aState.i >= 20) {
+      aQ.textContent = "Done — " + aState.right + "/20 in " + Math.round(aState.total / 1000) + "s";
+      aFeed.className = "feedback";
+      aFeed.textContent = aState.right >= 18 && aState.total / 20000 < 1.25
+        ? "That is the November standard. Keep it there."
+        : "Target is 18+ correct, under 75 seconds each. Log which ones ran long.";
+      aIn.disabled = true; aSubmit.disabled = true; aSkip.disabled = true;
+      aStart.disabled = false; aStart.textContent = "Restart";
+      return;
+    }
+    aState.cur = GEN[Math.floor(Math.random() * GEN.length)]();
+    aState.t0 = Date.now();
+    aQ.textContent = aState.cur.q;
+    aIn.value = ""; aIn.focus();
+    aStats();
+  }
+
+  function aGrade(skipped) {
+    var dt = Date.now() - aState.t0;
+    aState.total += dt;
+    if (dt > 90000) aState.slow++;
+    var want = aState.cur.a;
+    var got = parseFloat(aIn.value);
+    var ok = !skipped && isFinite(got) && Math.abs(got - want) < 0.02;
+    if (ok) { aState.right++; aFeed.className = "feedback good"; aFeed.textContent = "Correct · " + (dt / 1000).toFixed(1) + "s"; }
+    else { aFeed.className = "feedback bad"; aFeed.textContent = (skipped ? "Skipped · answer " : "No — answer ") + want + " · " + (dt / 1000).toFixed(1) + "s"; }
+    aState.i++;
+    aNext();
+  }
+
+  aStart.addEventListener("click", function () {
+    aState = { i: 0, right: 0, total: 0, slow: 0, cur: null, t0: 0 };
+    aIn.disabled = false; aSubmit.disabled = false; aSkip.disabled = false;
+    aStart.disabled = true;
+    aFeed.className = "feedback"; aFeed.textContent = "";
+    aNext();
+  });
+  aSubmit.addEventListener("click", function () { if (aState && aState.i < 20) aGrade(false); });
+  aSkip.addEventListener("click", function () { if (aState && aState.i < 20) aGrade(true); });
+  aIn.addEventListener("keydown", function (e) { if (e.key === "Enter" && aState && aState.i < 20) aGrade(false); });
+
+  /* ---------------- sectional clock ---------------- */
+  var MARKERS = {
+    varc: [[40 * 60, "Triage: first two lines of all four passages, rank them"],
+           [38 * 60, "Passage 1 — your most tractable, 8 minutes"],
+           [30 * 60, "Passage 2, 8 minutes"],
+           [22 * 60, "Passage 3, 8 minutes"],
+           [14 * 60, "All 8 VA questions — jumbles and odd-one-out are free"],
+           [4 * 60,  "Passage 4: direct questions only, or finish VA"]],
+    dilr: [[40 * 60, "Read all four sets. Solve nothing. Mark GO / MAYBE / NO"],
+           [35 * 60, "GO set 1 — abandon at 12 minutes, no exceptions"],
+           [23 * 60, "GO set 2 — abandon at 12 minutes"],
+           [11 * 60, "GO set 3, or mop up single questions from MAYBEs"]],
+    qa:   [[40 * 60, "Pass 1: all 22 in order, only sub-60-second questions"],
+           [28 * 60, "Pass 2: the M questions, 90–120 seconds each"],
+           [10 * 60, "Pass 3: guess every TITA, re-check the two you rushed"]]
+  };
+  var tLeft = 40 * 60, tTimer = null, tMode = "varc";
+  var tFace = document.getElementById("tFace"), tPhase = document.getElementById("tPhase");
+
+  function tRender() {
+    var m = Math.floor(tLeft / 60), s = tLeft % 60;
+    tFace.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+    tFace.className = "timer-face" + (tLeft <= 300 ? " crit" : tLeft <= 600 ? " warn" : "");
+    var marks = MARKERS[tMode], label = marks[marks.length - 1][1];
+    for (var i = 0; i < marks.length; i++) { if (tLeft <= marks[i][0]) label = marks[i][1]; }
+    tPhase.textContent = tMode.toUpperCase() + ": " + label;
+  }
+  function tStop() {
+    clearInterval(tTimer); tTimer = null;
+    document.getElementById("tStart").disabled = false;
+    document.getElementById("tPause").disabled = true;
+  }
+  document.getElementById("tStart").addEventListener("click", function () {
+    if (tTimer) return;
+    document.getElementById("tStart").disabled = true;
+    document.getElementById("tPause").disabled = false;
+    tTimer = setInterval(function () {
+      tLeft--;
+      if (tLeft <= 0) { tLeft = 0; tRender(); tStop(); tPhase.textContent = "Section closed. You cannot go back."; return; }
+      tRender();
+    }, 1000);
+  });
+  document.getElementById("tPause").addEventListener("click", tStop);
+  document.getElementById("tReset").addEventListener("click", function () { tStop(); tLeft = 40 * 60; tRender(); });
+  document.querySelectorAll("[data-mode]").forEach(function (b) {
+    b.addEventListener("click", function () { tMode = b.getAttribute("data-mode"); tStop(); tLeft = 40 * 60; tRender(); });
+  });
+  tRender();
+
+  /* ---------------- mock log ---------------- */
+  var ROWS = [
+    { k: "m0", label: "Diagnostic" },
+    { k: "m1", label: "Mock 1" },
+    { k: "m2", label: "Mock 2" },
+    { k: "m3", label: "Mock 3" },
+    { k: "m4", label: "Mock 4" },
+    { k: "m5", label: "Mock 5 (final)" }
+  ];
+
+  function buildLog() {
+    var tb = document.getElementById("logBody");
+    tb.textContent = "";
+    ROWS.forEach(function (r) {
+      var saved = state.log[r.k] || {};
+      var tr = document.createElement("tr");
+
+      var tdName = document.createElement("td");
+      tdName.innerHTML = "<strong>" + r.label + "</strong>";
+      tr.appendChild(tdName);
+
+      var tdDate = document.createElement("td");
+      var dIn = document.createElement("input");
+      dIn.type = "text"; dIn.className = "date"; dIn.placeholder = "dd mmm";
+      dIn.id = r.k + "-date"; dIn.value = saved.date || "";
+      dIn.setAttribute("aria-label", r.label + " date");
+      tdDate.appendChild(dIn); tr.appendChild(tdDate);
+
+      var fields = [["varc", 72], ["dilr", 66], ["qa", 66]];
+      var inputs = {};
+      fields.forEach(function (f) {
+        var td = document.createElement("td"); td.className = "num";
+        var inp = document.createElement("input");
+        inp.type = "number"; inp.min = "0"; inp.max = String(f[1]);
+        inp.id = r.k + "-" + f[0];
+        inp.value = (saved[f[0]] === 0 || saved[f[0]]) ? saved[f[0]] : "";
+        inp.setAttribute("aria-label", r.label + " " + f[0].toUpperCase() + " raw score");
+        inputs[f[0]] = inp;
+        td.appendChild(inp); tr.appendChild(td);
+      });
+
+      var tdTot = document.createElement("td"); tdTot.className = "num";
+      var tdPct = document.createElement("td"); tdPct.className = "num";
+      tr.appendChild(tdTot); tr.appendChild(tdPct);
+
+      function recompute() {
+        var any = false, tot = 0;
+        fields.forEach(function (f) {
+          var v = parseFloat(inputs[f[0]].value);
+          if (isFinite(v)) { tot += v; any = true; }
+        });
+        tdTot.innerHTML = any ? "<strong>" + tot + "</strong>" : "—";
+        tdPct.textContent = any ? fmtPct(pctile("overall", tot)) : "—";
+      }
+      function persist() {
+        var o = { date: dIn.value };
+        fields.forEach(function (f) {
+          var v = parseFloat(inputs[f[0]].value);
+          if (isFinite(v)) o[f[0]] = v;
+        });
+        state.log[r.k] = o; save(state); recompute();
+      }
+      dIn.addEventListener("input", persist);
+      fields.forEach(function (f) { inputs[f[0]].addEventListener("input", persist); });
+
+      recompute();
+      tb.appendChild(tr);
+    });
+  }
+  buildLog();
+})();
+</script>
+
+</body></html>
